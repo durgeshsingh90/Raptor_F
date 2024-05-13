@@ -1,0 +1,107 @@
+<!-- bitmap_config/templates/bitmap_config/import_page.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Import Bitmap Configuration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Initially hide the forms */
+        }
+        label {
+            font-weight: bold;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Import Bitmap Configuration</h2>
+
+    <!-- Toggle Buttons -->
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-primary" onclick="toggleForm('jsonForm')">Import JSON</button>
+        <button type="button" class="btn btn-primary" onclick="toggleForm('manualForm')">Add Subfield</button>
+    </div>
+
+    <script>
+        function submitJsonForm() {
+            var formData = new FormData(document.getElementById('jsonForm'));
+    
+            $.ajax({
+                url: "{% your_form_submission_url %}",  // Replace with the actual URL for form submission
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    // Handle success response if needed
+                    console.log(response);
+                },
+                error: function(error) {
+                    // Handle error if needed
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+    
+
+
+    <!-- Form for Pasting JSON Data -->
+    <form id="jsonForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="json_data">Paste JSON Data:</label>
+            <textarea class="form-control" name="json_data" rows="10" cols="80" required></textarea>
+        </div>
+        <!-- <button type="submit" class="btn btn-primary">Import</button> -->
+        <button type="button" class="btn btn-primary" onclick="submitJsonForm()">Import</button>
+
+    </form>
+
+    <!-- Form for Manual Subfield Details -->
+    <form id="manualForm" method="post" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function toggleForm(formId) {
+        // Hide all forms
+        document.querySelectorAll('form').forEach(function(form) {
+            form.style.display = 'none';
+        });
+
+        // Show the selected form
+        document.getElementById(formId).style.display = 'block';
+    }
+</script>
+
+</body>
+</html>

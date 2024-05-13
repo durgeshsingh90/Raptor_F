@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Converter</title>
+    <style>
+        /* Your CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JSON Converter</h1>
+        <form id="inputForm">
+            <label for="userInput">Enter JSON:</label>
+            <textarea id="userInput" rows="4" cols="50"></textarea>
+            <br>
+            <button type="button" id="convertBtn">Convert</button>
+            <button type="button" id="copyJsonBtn">Copy JSON</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("convertBtn").addEventListener("click", function() {
+            var userInput = document.getElementById("userInput").value;
+            // Make an AJAX request to execute the code in views.py
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // On success, display the response (JSON) in an alert
+                        alert(xhr.responseText);
+                    } else {
+                        // On failure, display an error message
+                        alert("Failed to convert JSON. Please try again.");
+                    }
+                }
+            };
+            xhr.open("POST", "{% url 'process_input' %}", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({ "user_input": userInput }));
+        });
+    </script>
+</body>
+</html>

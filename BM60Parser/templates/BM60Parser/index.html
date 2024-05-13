@@ -1,0 +1,133 @@
+<!-- BM60Parser/templates/BM60Parser/index.html -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter BM60</title>
+    <link rel="stylesheet" href="{% static 'BM60Parser/styles.css' %}">
+</head>
+
+
+    
+<body>
+    <div class="container">
+        <h1>Enter BM60</h1>
+        <form id="inputForm" method="post" action="{% url 'BM60Parser:process_input' %}">
+            {% csrf_token %}
+            <label for="user_input">Enter a string:</label>
+            <textarea name="user_input" id="user_input" rows="4" cols="50">{{ user_input }}</textarea>
+
+            <br>
+            <button type="submit">Process</button>
+            <button type="button" id="jsonButton">Get JSON</button>
+            <button type="button" id="copyJsonButton">Copy JSON</button>
+        </form>
+
+        {% if results %}
+            <h2>Results:</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Length</th>
+                        <th>Subfield</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                        <tr class="result">
+                            <td>{{ result.length }}</td>
+                            <td>{{ result.subfield }}</td>
+                            <td>{{ result.value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+    <script>
+        var jsonDataFetched = false; // Flag to track if JSON data has been fetched
+        var originalText; // Variable to store original button text
+    
+        document.getElementById("jsonButton").addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            var form = document.getElementById("inputForm");
+            var formData = new FormData(form); // Get form data
+            
+            // Clear previous JSON results
+            var jsonContainer = document.getElementById("jsonResultsContainer");
+            if (jsonContainer) {
+                jsonContainer.parentNode.removeChild(jsonContainer);
+            }
+            
+            // Make AJAX request to server
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var responseData = JSON.parse(xhr.responseText);
+                        // Update page with JSON data
+                        var resultsContainer = document.createElement("div");
+                        resultsContainer.id = "jsonResultsContainer";
+                        resultsContainer.innerHTML = "<h2>JSON Results:</h2><pre>" + JSON.stringify(responseData, null, 2) + "</pre>";
+                        document.body.appendChild(resultsContainer);
+                        jsonDataFetched = true; // Set flag to true after fetching JSON data
+                    } else {
+                        console.error("Error: Unable to fetch JSON data.");
+                    }
+                }
+            };
+            xhr.open("POST", form.action + "?format=json", true);
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+            xhr.send(formData);
+        });
+    
+        document.getElementById("copyJsonButton").addEventListener("click", function() {
+            if (!jsonDataFetched) {
+                console.error("Error: JSON data has not been fetched yet.");
+                return;
+            }
+    
+            var jsonContainer = document.getElementById("jsonResultsContainer");
+            if (jsonContainer) {
+                var jsonData = JSON.parse(jsonContainer.querySelector("pre").textContent);
+                // Modify the JSON data to start with "BM060": 
+                var jsonString = '"BM060":' + JSON.stringify(jsonData, null, 2);
+    
+                var range = document.createRange();
+                var pre = jsonContainer.querySelector("pre");
+                pre.textContent = jsonString;
+                range.selectNode(pre);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand("copy");
+                window.getSelection().removeAllRanges();
+    
+                // Change button text to "Copied!"
+                var copyJsonButton = document.getElementById("copyJsonButton");
+                originalText = copyJsonButton.textContent;
+                copyJsonButton.textContent = "Copied!";
+                // Revert text after 1 second
+                setTimeout(function() {
+                    copyJsonButton.textContent = originalText;
+                }, 1000);
+            } else {
+                console.error("Error: No JSON data to copy.");
+            }
+        });
+    </script>
+    
+    
+    
+    
+    
+    
+    
+    
+</body>
+</html>
