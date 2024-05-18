@@ -1,11 +1,9 @@
-# splunk2Json/urls.py
+# splunk2json/urls.py
 
 from django.urls import path
-from . import views
+from .views import process_data_view
 
-app_name = 'splunk2Json'
-
+app_name = 'splunk2json'
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('process/', views.process_input, name='process_input'),
+    path('process-data/', process_data_view, name='process_data'),
 ]

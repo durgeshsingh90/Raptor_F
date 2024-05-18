@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'BM61Parser',
     'homepage',
     'bitmap_config',
-    'splunk2Json'
+    'splunk2json'
 
 ]
 
@@ -123,8 +123,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "BM60Parser/static",
+    BASE_DIR / "homepage/static",
+    BASE_DIR / "splunk2json/static",
+    # Add other app static directories as needed
 ]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

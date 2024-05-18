@@ -14,6 +14,7 @@
     
 <body>
     <div class="container">
+        <a href="{% url 'homepage:home' %}" class="home-btn">Home</a>
         <h1>Enter BM60</h1>
         <form id="inputForm" method="post" action="{% url 'BM60Parser:process_input' %}">
             {% csrf_token %}
