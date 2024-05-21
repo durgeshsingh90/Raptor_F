@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'BM61Parser',
     'homepage',
     'bitmap_config',
-    'splunk2json'
+    'splunk2json',
+    'sysgende'
 
 ]
 
@@ -126,6 +127,8 @@ STATICFILES_DIRS = [
     BASE_DIR / "BM60Parser/static",
     BASE_DIR / "homepage/static",
     BASE_DIR / "splunk2json/static",
+    BASE_DIR / "sysgende/static",
+
     # Add other app static directories as needed
 ]
 

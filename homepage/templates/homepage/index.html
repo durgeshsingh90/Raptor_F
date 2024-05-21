@@ -1,30 +1,66 @@
-<!-- homepage/templates/homepage/index.html -->
-
-{% load static %}  <!-- Add this line at the top of your HTML file -->
+{% load static %} <!-- Add this line at the top of your HTML file -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Beautiful Website</title>
-  <!-- Link to external CSS file -->
-  <link rel="stylesheet" href="{% static 'homepage/styles.css' %}">
+    <meta charset="UTF-8">
+    <title>My Beautiful Website</title>
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="{% static 'homepage/styles.css' %}">
 </head>
 <body>
 
-  <div class="nav">
+<div class="nav">
     <a href="#">Home</a>
     <a href="{% url 'BM60Parser:index' %}">BM60Parser</a>
     {% comment %} <a href="{% url 'BM61Parser:index' %}">BM61Parser</a> {% endcomment %}
     <a href="{% url 'splunk2json:process_data' %}">Splunk2Json</a>
+    <button id="generate-and-copy-button">Generate and Copy Data</button>
+    {% comment %} <a href="{% url 'splunk2json:process_data' %}">Splunk2Json</a> {% endcomment %}
     <a href="#">Contact</a>
-  </div>
+</div>
 
-  <div class="container">
+<div class="container">
     <!-- Your page content goes here -->
     <h1>Welcome to My Beautiful Website!</h1>
+    <div id="generated-data-container"></div>
     {% comment %} <p>This is a sample content section. Feel free to add your own content here.</p> {% endcomment %}
-  </div>
+</div>
+
+<!-- Include jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- JavaScript code for AJAX request -->
+<script>
+    $(document).ready(function() {
+        $("#generate-and-copy-button").click(function() {
+            $.ajax({
+                url: "{% url 'sysgende:generate_data' %}",
+                type: "GET",
+                success: function(data) {
+                    // Remove curly braces from JSON string
+                    var jsonData = JSON.stringify(data, null, 2).slice(1, -1);
+
+                    // Display data
+                    var generatedDataContainer = $("#generated-data-container");
+                    generatedDataContainer.empty();
+                    generatedDataContainer.append("<pre>" + jsonData + "</pre>");
+
+                    // Copy data to clipboard
+                    var textArea = document.createElement("textarea");
+                    textArea.value = jsonData;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(textArea);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
