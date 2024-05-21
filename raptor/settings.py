@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'homepage',
     'bitmap_config',
     'splunk2json',
-    'sysgende'
+    'sysgende',
+    'mclogsfilter'
 
 ]
 
@@ -128,6 +129,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "homepage/static",
     BASE_DIR / "splunk2json/static",
     BASE_DIR / "sysgende/static",
+    BASE_DIR / "mclogsfilter/static",
 
     # Add other app static directories as needed
 ]

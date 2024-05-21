@@ -24,6 +24,8 @@ urlpatterns = [
     path('', include('homepage.urls')),
     path('bitmap_config/', include('bitmap_config.urls')),
     path('splunk2json/', include('splunk2json.urls')), 
-    path('sysgende/', include('sysgende.urls')), 
+    path('sysgende/', include('sysgende.urls')),
+    path('mclogsfilter/', include('mclogsfilter.urls')),
+ 
     
 ]
