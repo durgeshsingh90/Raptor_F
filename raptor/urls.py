@@ -26,6 +26,7 @@ urlpatterns = [
     path('splunk2json/', include('splunk2json.urls')), 
     path('sysgende/', include('sysgende.urls')),
     path('mclogsfilter/', include('mclogsfilter.urls')),
- 
+    path('pspsignofflist/', include('pspsignofflist.urls')),
+
     
 ]

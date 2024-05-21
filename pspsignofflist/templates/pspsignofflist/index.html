@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folder Selection and PDF Processing</title>
+</head>
+<body>
+    <h1>Select a Folder to Search for PDF Files</h1>
+    <input type="file" id="folderInput" webkitdirectory directory multiple>
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('folderInput').addEventListener('change', handleFileSelect, false);
+
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            const output = document.getElementById('output');
+            output.innerHTML = ''; // Clear previous results
+
+            const pdfFiles = [];
+
+            for (const file of files) {
+                if (file.name.endsWith('.pdf')) {
+                    pdfFiles.push(file);
+                }
+            }
+
+            if (pdfFiles.length > 0) {
+                const list = document.createElement('ul');
+                pdfFiles.forEach(file => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = file.webkitRelativePath;
+                    list.appendChild(listItem);
+                });
+                output.appendChild(list);
+            } else {
+                output.textContent = 'No PDF files found in the selected folder.';
+            }
+
+            // Here you can add your extra logic to process the PDF files
+            processPDFFiles(pdfFiles);
+        }
+
+        function processPDFFiles(pdfFiles) {
+            // Add your custom logic here to process the PDF files
+            pdfFiles.forEach(file => {
+                console.log(`Processing: ${file.name}`);
+                // Example: Read file contents, extract text, etc.
+            });
+        }
+    </script>
+</body>
+</html>

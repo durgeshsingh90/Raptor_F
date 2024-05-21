@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'bitmap_config',
     'splunk2json',
     'sysgende',
-    'mclogsfilter'
+    'mclogsfilter',
+    'pspsignofflist'
 
 ]
 
@@ -130,6 +131,8 @@ STATICFILES_DIRS = [
     BASE_DIR / "splunk2json/static",
     BASE_DIR / "sysgende/static",
     BASE_DIR / "mclogsfilter/static",
+    BASE_DIR / "pspsignofflist/static",
+
 
     # Add other app static directories as needed
 ]
