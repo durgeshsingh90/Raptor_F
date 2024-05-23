@@ -23,3 +23,23 @@ pre {
 .button-container {
     margin-top: 10px;
 }
+
+
+/* Style for the Home button */
+.home-btn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue color */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 999; /* Ensure it's on top of other elements */
+}
+
+/* Hover effect for the Home button */
+.home-btn:hover {
+    background-color: #0056b3; /* Darker shade of blue */
+}

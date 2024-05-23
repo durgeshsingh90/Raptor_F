@@ -9,6 +9,8 @@
     <script src="{% static 'splunk2mango/script.js' %}"></script>
     </head>
 <body>
+    <a href="{% url 'homepage:home' %}" class="home-btn">Home</a>
+
     <form id="textInputForm" method="post" autocomplete="off">
         <h2>Enter 100 message:</h2>
         {% csrf_token %}
