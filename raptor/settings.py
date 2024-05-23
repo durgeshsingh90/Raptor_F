@@ -130,14 +130,12 @@ STATICFILES_DIRS = [
     BASE_DIR / "BM60Parser/static",
     BASE_DIR / "homepage/static",
     BASE_DIR / "splunk2mango/static",
-    # BASE_DIR / "sysgende/static",
     BASE_DIR / "mclogsfilter/static",
     BASE_DIR / "pspsignofflist/static",
 
 
     # Add other app static directories as needed
 ]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

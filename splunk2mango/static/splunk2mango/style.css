@@ -1,0 +1,25 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 20px;
+    height: 100vh;
+    margin: 0;
+}
+form, .output-container {
+    margin: 10px;
+    flex: 1;
+    min-width: 300px;
+}
+.output-container {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.button-container {
+    margin-top: 10px;
+}
