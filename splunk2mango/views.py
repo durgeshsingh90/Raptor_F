@@ -9,7 +9,7 @@ visa_card_number = ['4970110000000005']
 mc_card_number = ['5534218827246242', '6759050000000096']
 diners_card_number = ['3970110000000005']
 jcb_card_number = []
-dummy_track2_BM35 = ['=1212000000000000000']
+dummy_track2_BM35 = '=1212000000000000000'
 default_inst_num_BM32 = '000050'
 default_merchant_num_BM42 = '226000000021357'
 default_cvv2_BM48 = '861'
@@ -66,7 +66,9 @@ def process_input_data(input_lines):
                 json_data["data_elements"][f"DE{index.zfill(3)}"] = mc_card_number[0]
             elif value.startswith('6'):
                 json_data["data_elements"][f"DE{index.zfill(3)}"] = mc_card_number[1]
-        
+            else:
+                json_data["data_elements"][f"DE{index.zfill(3)}"] = value
+
         elif int(index) == 3:
             # Ensure that the value associated with index 3 is always six digits long
             value = value.ljust(6, '0')

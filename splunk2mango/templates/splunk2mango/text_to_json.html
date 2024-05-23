@@ -32,13 +32,17 @@
             margin-top: 10px;
         }
     </style>
+
 </head>
 <body>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Convert</button>
-    </form>
+<form id="textInputForm" method="post" autocomplete="off">
+    <h2>Enter 100 message:</h2> <!-- Add the header -->
+    {% csrf_token %}
+    {% comment %} {{ form.text.label_tag }} {% endcomment %}
+    {{ form.text }}
+    <button type="submit">Convert</button>
+</form>
+
     {% if json_output %}
     <div class="output-container">
         <h2>JSON Output:</h2>
@@ -65,4 +69,5 @@
         }
     </script>
 </body>
+
 </html>
