@@ -13,7 +13,7 @@
     <a href="#">Home</a>
     <a href="{% url 'BM60Parser:index' %}">BM60Parser</a>
     {% comment %} <a href="{% url 'BM61Parser:index' %}">BM61Parser</a> {% endcomment %}
-    <a href="{% url 'splunk2json:process_data' %}">Splunk2Json</a>
+    <a href="{% url 'splunk2mango:text_to_json' %}">splunk2mango</a>
     <a href="{% url 'upload_log_file' %}">Filter MC EMVCo Logs</a> <!-- New link added here -->
     <button id="generate-and-copy-button">Generate and Copy Data</button>
 </div>

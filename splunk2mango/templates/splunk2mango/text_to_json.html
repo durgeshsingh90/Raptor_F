@@ -4,17 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text to JSON</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 20px;
+            height: 100vh;
+            margin: 0;
+        }
+        form, .output-container {
+            margin: 10px;
+            flex: 1;
+            min-width: 300px;
+        }
+        .output-container {
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .button-container {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Convert Text to JSON</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Convert</button>
     </form>
     {% if json_output %}
+    <div class="output-container">
         <h2>JSON Output:</h2>
-        <pre>{{ json_output }}</pre>
+        <pre id="jsonOutput">{{ json_output }}</pre>
+        <div class="button-container">
+            <button id="copyButton" onclick="copyToClipboard()">Copy Code</button>
+        </div>
+    </div>
     {% endif %}
+    <script>
+        function copyToClipboard() {
+            const text = document.getElementById('jsonOutput').innerText;
+            navigator.clipboard.writeText(text).then(function() {
+                // Change the button text to "Copied!"
+                const copyButton = document.getElementById('copyButton');
+                copyButton.textContent = 'Copied!';
+                // After 2 seconds, revert the text back to "Copy Code"
+                setTimeout(() => {
+                    copyButton.textContent = 'Copy Code';
+                }, 1000);
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+    </script>
 </body>
 </html>
