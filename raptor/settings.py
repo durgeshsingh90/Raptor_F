@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'BM61Parser',
     'homepage',
     'bitmap_config',
-    'splunk2json',
+    'splunk2mango',
     'sysgende',
     'mclogsfilter',
     'pspsignofflist'
@@ -128,8 +128,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "BM60Parser/static",
     BASE_DIR / "homepage/static",
-    BASE_DIR / "splunk2json/static",
-    BASE_DIR / "sysgende/static",
+    BASE_DIR / "splunk2mango/static",
+    # BASE_DIR / "sysgende/static",
     BASE_DIR / "mclogsfilter/static",
     BASE_DIR / "pspsignofflist/static",
 
