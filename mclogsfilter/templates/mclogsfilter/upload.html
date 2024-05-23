@@ -36,12 +36,6 @@
                         <h5>File saved successfully!</h5>
                         <p>Output file saved at: <strong>{{ output_file_path }}</strong></p>
                         <p>Original log file saved at: <strong>{{ log_file_path }}</strong></p>
-                        <a href="#" class="btn btn-secondary" onclick="openFolder()">Open Folder</a>
-                        <script>
-                            function openFolder() {
-                                alert('Please navigate to the folder manually: ' + '{{ output_file_path }}');
-                            }
-                        </script>
                         {% endif %}
                     </div>
                 </div>
