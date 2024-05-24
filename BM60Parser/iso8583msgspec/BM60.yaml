@@ -1,0 +1,109 @@
+BM060:
+  - sf30:
+      name: "CVV2 presence indicator (Visa CNP only)"
+      format: "n1"
+      value:
+        0: "ABCD value not provided"
+        1: "ABCD value is present"
+  - sf31:
+      name: "Address verification data, Request"
+      format: "ans49"
+  - sf32:
+      name: "Address Verification data, Response"
+      format: "ans2"
+  - sf34:
+      name: "Merchant state or province code"
+      format: "an3"
+  - sf35:
+      name: "merchant post code"
+      format: "ans..10"
+  - sf37:
+      name: "Dynamic Curreny conversion (DCC) data"
+      format: "n29"
+  - sf40:
+      name: "Electronic commerce Indicatr (ECI)"
+      format: "an2"
+  - sf41:
+      name: "Surchage Information for Canada"
+      format: "an9"
+  - sf46: 
+      name: "Scheme Destination"
+      format: "ans2"
+  - sf47:
+      name: "mPOS terminal type"
+      format: "an1"
+  - sf49:
+      name: "COF originator indicator"
+      format: "n1"
+  - sf50:
+      name: "Merchant Initiated transaction Indicator"
+      format: "n2"
+  - sf51:
+      name: "Reccuring/Instalment/credential on file indicator"
+      format: "n1"
+  - sf52:
+      name: "Additional response reason code"
+      format: "n2"
+  - sf53:
+      name: "Terminal Capabilities"
+      format: "ans3"
+  - sf54:
+      name: "Batch Information"
+      format: "ans..99"
+  - sf55:
+      name: "Additional Authorisation data"
+      format: "ans30"
+  - sf58:
+      name: "Mastercard TTI"
+      format: "an..3"
+  - sf61:
+      name: "xid/bepaf/vcode"
+      format: "ans40"
+  - sf62:
+      name: "cavv"
+      format: "ans40"
+  - sf63:
+      name: "ucaf"
+      format: "ans..35"
+  - sf64:
+      name: "Mastercard Assigned ID"
+      format: "an6"
+  - sf65:
+      name: "eWallet data"
+      format: "an14"
+  - sf66:
+      name: "secure program protocol"
+      format: "n1"
+  - sf67:
+      name: "Directory server transaction id"
+      format: "ans36"
+  - sf68:
+      name: "Scheme response code"
+      format: "ans..3"
+  - sf71:
+      name: "Cryptocurrency/High risk securities indicator"
+      format: "an1"
+  - sf72:
+      name: "Strong customer authentication exemtion indicator (SCA)"
+      format: "an..8"
+  - sf73:
+      name: "MAss transit program indicator"
+      format: "an3"
+  - sf74:
+      name: "Single tap indicator"
+      format: "an2"
+  - sf75:
+      name: "Single tap indicator response"
+      format: "n1"
+  - sf76:
+      name: "UPI AV Value"
+      format: "ans..99"
+  - sf77:
+      name: "Authentication ID"
+      format: "ans..40"
+  - sf78:
+      name: "Mastercard merchant payment gateway ID"
+      format: "n11"
+  - sf79:
+      name: "UPI transaction initiation mode"
+      format: "an1"

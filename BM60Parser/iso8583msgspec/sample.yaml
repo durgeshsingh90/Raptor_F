@@ -1,0 +1,13 @@
+BM060:
+  - sf30:
+      name: "abcd presence indicator "
+      format: "n1"
+      value:
+        0: "ABCD value not provided"
+        1: "ABCD value is present"
+  - sf31:
+      name: "Address verification data, Request"
+      format: "ans49"
+  - sf32:
+      name: "Address Verification data, Response"
+      format: "ans2"
