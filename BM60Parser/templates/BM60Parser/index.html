@@ -3,15 +3,13 @@
 {% load static %}
 
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enter BM60</title>
     <link rel="stylesheet" href="{% static 'BM60Parser/styles.css' %}">
 </head>
-
-
-    
 <body>
     <div class="container">
         <a href="{% url 'homepage:home' %}" class="home-btn">Home</a>
@@ -20,7 +18,6 @@
             {% csrf_token %}
             <label for="user_input">Enter a string:</label>
             <textarea name="user_input" id="user_input" rows="4" cols="50">{{ user_input }}</textarea>
-
             <br>
             <button type="submit">Process</button>
             <button type="button" id="jsonButton">Get JSON</button>
@@ -29,13 +26,15 @@
 
         {% if results %}
             <h2>Results:</h2>
-            
             <table>
                 <thead>
                     <tr>
                         <th>Length</th>
                         <th>Subfield</th>
                         <th>Value</th>
+                        <th>Name</th> <!-- New heading for name -->
+                        <th>Format</th> <!-- New heading for spec_length -->
+                        <th>Value_Description</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +43,9 @@
                             <td>{{ result.length }}</td>
                             <td>{{ result.subfield }}</td>
                             <td>{{ result.value }}</td>
+                            <td>{{ result.name }}</td> <!-- Display name -->
+                            <td>{{ result.format }}</td> <!-- Display spec_length -->
+                            <td>{{ result.value_description|default:" "  }}</td> 
                         </tr>
                     {% endfor %}
                 </tbody>
