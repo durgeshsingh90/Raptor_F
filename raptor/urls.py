@@ -20,7 +20,6 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('BM60Parser/', include('BM60Parser.urls')),
-    path('BM61Parser/', include('BM61Parser.urls')),
     path('', include('homepage.urls')),
     path('bitmap_config/', include('bitmap_config.urls')),
     path('splunk2mango/', include('splunk2mango.urls')), 

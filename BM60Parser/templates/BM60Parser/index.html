@@ -33,8 +33,8 @@
                         <th>Subfield</th>
                         <th>Value</th>
                         <th>Name</th> <!-- New heading for name -->
-                        <th>Format</th> <!-- New heading for spec_length -->
                         <th>Value_Description</th>
+                        <th>Format</th> <!-- New heading for spec_length -->
                     </tr>
                 </thead>
                 <tbody>
@@ -44,8 +44,8 @@
                             <td>{{ result.subfield }}</td>
                             <td>{{ result.value }}</td>
                             <td>{{ result.name }}</td> <!-- Display name -->
-                            <td>{{ result.format }}</td> <!-- Display spec_length -->
                             <td>{{ result.value_description|default:" "  }}</td> 
+                            <td>{{ result.format }}</td> <!-- Display spec_length -->
                         </tr>
                     {% endfor %}
                 </tbody>
