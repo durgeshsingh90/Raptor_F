@@ -22,10 +22,10 @@ urlpatterns = [
     path('BM60Parser/', include('BM60Parser.urls')),
     path('', include('homepage.urls')),
     path('bitmap_config/', include('bitmap_config.urls')),
-    path('splunk2mango/', include('splunk2mango.urls')), 
+    path('splunk2mango/', include('homepage.urls')), 
     path('sysgende/', include('sysgende.urls')),
     path('mclogsfilter/', include('mclogsfilter.urls')),
     path('pspsignofflist/', include('pspsignofflist.urls')),
-
-    
+    path('SplunkRRN/', include('homepage.urls')),
+    path('compare/', include('textcompare.urls')),
 ]

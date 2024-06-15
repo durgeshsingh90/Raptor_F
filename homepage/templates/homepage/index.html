@@ -6,24 +6,70 @@
     <title>My Beautiful Website</title>
     <!-- Link to external CSS file -->
     <link rel="stylesheet" href="{% static 'homepage/styles.css' %}">
+    <style>
+        .container {
+            display: flex;
+        }
+        .content {
+            flex: 3;
+        }
+        .history {
+            flex: 1;
+            margin-left: 20px;
+            border-left: 1px solid #ccc;
+            padding-left: 20px;
+        }
+        .history-entry {
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            position: relative;
+        }
+        .timestamp {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .entry-number {
+            font-weight: bold;
+        }
+        .copy-button {
+            position: absolute;
+            right: 10px;
+            top: 1px;
+            padding: 2px 5px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .copy-button:focus {
+            outline: none;
+        }
+    </style>
 </head>
 <body>
 
 <div class="nav">
     <a href="#">Home</a>
     <a href="{% url 'BM60Parser:index' %}">BM60Parser</a>
-    <a href="{% url 'splunk2mango:text_to_json' %}">splunk2mango</a>
+    <a href="{% url 'homepage:splunk2mango' %}">Splunk to Mango</a>
     <a href="{% url 'upload_log_file' %}">Filter MC EMVCo Logs</a> <!-- New link added here -->
     <button id="generate-and-copy-button">Generate and Copy Data</button>
-    {% comment %} <a href="BM60Parser\templates\BM60Parser\json2yaml.html" target="BM60Parser\templates\BM60Parser\json2yaml.html">Json to Yaml Converter</a> <!-- New link for opening external HTML in a new tab --> {% endcomment %}
-    <a href="{% url 'BM60Parser:json2yaml' %}" target="BM60Parser\templates\BM60Parser\json2yaml.html">Json to Yaml Converter</a>
-
+    <a href="{% url 'homepage:json2yaml' %}">Json to Yaml Converter</a>
+    {% comment %} <a href="{% url 'BM60Parser:json2yaml' %}" target="BM60Parser\templates\BM60Parser\json2yaml.html">Json to Yaml Converter</a> {% endcomment %}
+    <a href="{% url 'homepage:SplunkRRN' %}">SplunkRRN</a>
 </div>
 
 <div class="container">
-    <!-- Your page content goes here -->
-    <h1>Welcome to My Beautiful Website!</h1>
-    <div id="generated-data-container"></div>
+    <div class="content">
+        <!-- Your page content goes here -->
+        <h1>Welcome to My Beautiful Website!</h1>
+    </div>
+    <div class="history">
+        <h2>Generated Data History</h2>
+        <div id="history-container"></div>
+    </div>
 </div>
 
 <!-- Include jQuery library -->
@@ -32,31 +78,94 @@
 <!-- JavaScript code for AJAX request -->
 <script>
     $(document).ready(function() {
+        var historyContainer = $("#history-container");
+        var entryNumber = 1;
+        var maxEntries = 10;
+
+        // Load history from localStorage
+        if (localStorage.getItem('history')) {
+            historyContainer.html(localStorage.getItem('history'));
+            entryNumber = historyContainer.children().length + 1;
+        }
+
+        function updateLocalStorage() {
+            var entries = historyContainer.children('.history-entry');
+            if (entries.length > maxEntries) {
+                entries.last().remove();
+            }
+            localStorage.setItem('history', historyContainer.html());
+        }
+
+        function addCopyButtonHandler(button) {
+            button.click(function() {
+                var entry = $(this).siblings('pre').text();
+                var textArea = document.createElement("textarea");
+                textArea.value = entry;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textArea);
+                
+                var originalText = $(this).text();
+                $(this).text('Copied!');
+                var button = $(this);
+                setTimeout(function() {
+                    button.text(originalText);
+                }, 1000);
+            });
+        }
+
+        function copyLatestEntry() {
+            var latestEntry = historyContainer.find('.history-entry').first().find('pre').text();
+            var textArea = document.createElement("textarea");
+            textArea.value = latestEntry;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+        }
+
         $("#generate-and-copy-button").click(function() {
             $.ajax({
                 url: "{% url 'sysgende:generate_data' %}",
                 type: "GET",
                 success: function(data) {
-                    // Remove curly braces from JSON string
-                    var jsonData = JSON.stringify(data, null, 2).slice(1, -1);
+                    // Get current date and time
+                    var now = new Date();
+                    var dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+                    var timeOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+                    var formattedDate = now.toLocaleDateString('en-US', dateOptions);
+                    var formattedTime = now.toLocaleTimeString('en-US', timeOptions);
+                    var timestamp = formattedDate + " " + formattedTime;
 
-                    // Display data
-                    var generatedDataContainer = $("#generated-data-container");
-                    generatedDataContainer.empty();
-                    generatedDataContainer.append("<pre>" + jsonData + "</pre>");
+                    // Remove curly braces from JSON string and add a comma at the end
+                    var jsonData = JSON.stringify(data, null, 2).slice(1, -1).replace(/\n$/, '') + ",";
 
-                    // Copy data to clipboard
-                    var textArea = document.createElement("textarea");
-                    textArea.value = jsonData;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand("copy");
-                    document.body.removeChild(textArea);
+                    // Add to history with timestamp and entry number
+                    var historyEntry = "<div class='history-entry'><div class='entry-number'>Entry #" + entryNumber + "</div><div class='timestamp'>" + timestamp + "</div><pre>" + jsonData + "</pre><button class='copy-button'>Copy</button></div>";
+                    historyContainer.prepend(historyEntry);
+
+                    // Attach copy button handler
+                    addCopyButtonHandler(historyContainer.find('.copy-button').first());
+
+                    // Copy the latest entry
+                    copyLatestEntry();
+
+                    // Update localStorage and maintain the limit
+                    updateLocalStorage();
+
+                    // Increment entry number
+                    entryNumber++;
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
+        });
+
+        // Attach copy button handler to existing entries
+        historyContainer.find('.copy-button').each(function() {
+            addCopyButtonHandler($(this));
         });
     });
 </script>

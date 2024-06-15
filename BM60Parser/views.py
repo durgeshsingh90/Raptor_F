@@ -67,5 +67,3 @@ def process_input(request):
 
 
 
-def json2yaml(request):
-    return render(request, 'BM60Parser/json2yaml.html')

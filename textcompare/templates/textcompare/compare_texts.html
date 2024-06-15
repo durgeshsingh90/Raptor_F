@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Compare</title>
+    <style>
+        .added { background-color: yellow; }
+        .removed { background-color: red; }
+        textarea {
+            white-space: pre-wrap; /* Preserve whitespace and line breaks */
+        }
+    </style>
+</head>
+<body>
+    <h1>Text Compare</h1>
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="text1" rows="20" cols="50">{% if text1 %}{{ text1|safe }}{% endif %}</textarea>
+        <textarea name="text2" rows="20" cols="50">{% if text2 %}{{ text2|safe }}{% endif %}</textarea>
+        <br>
+        <button type="submit">Compare</button>
+    </form>
+</body>
+</html>

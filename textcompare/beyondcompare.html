@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Compare</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .editor-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      position: relative;
+    }
+    .editor-wrapper {
+      width: 45%;
+    }
+    .CodeMirror {
+      border: 1px solid #ddd;
+      height: 400px;
+    }
+    .minimap {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 400px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+      background: #f4f4f4;
+    }
+    .minimap-content {
+      font-size: 2px;
+      line-height: 2px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    button {
+      margin: 5px;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/google/diff-match-patch/javascript/diff_match_patch.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="controls">
+      <button onclick="clearAll()">Clear All</button>
+    </div>
+    <div class="editor-container">
+      <div class="editor-wrapper">
+        <button onclick="clearBox(1)">Clear Box 1</button>
+        <textarea id="text1"></textarea>
+      </div>
+      <div class="minimap" id="minimap">
+        <pre class="minimap-content" id="minimap-content"></pre>
+      </div>
+      <div class="editor-wrapper">
+        <button onclick="clearBox(2)">Clear Box 2</button>
+        <textarea id="text2"></textarea>
+      </div>
+    </div>
+  </div>
+  <script>
+    let editor1, editor2;
+    const dmp = new diff_match_patch();
+
+    window.onload = function() {
+      editor1 = CodeMirror.fromTextArea(document.getElementById('text1'), {
+        lineNumbers: true,
+        mode: 'text/plain'
+      });
+      editor2 = CodeMirror.fromTextArea(document.getElementById('text2'), {
+        lineNumbers: true,
+        mode: 'text/plain'
+      });
+
+      editor1.on('change', compareText);
+      editor2.on('change', compareText);
+
+      // Load saved text from local storage
+      if (localStorage.getItem('text1')) {
+        editor1.setValue(localStorage.getItem('text1'));
+      }
+      if (localStorage.getItem('text2')) {
+        editor2.setValue(localStorage.getItem('text2'));
+      }
+    };
+
+    function compareText() {
+      const text1 = editor1.getValue().split('\n').map(line => line.trim());
+      const text2 = editor2.getValue().split('\n').map(line => line.trim());
+
+      const diffs = dmp.diff_main(text1.join('\n'), text2.join('\n'));
+      dmp.diff_cleanupSemantic(diffs);
+
+      const text1Annotated = [];
+      const text2Annotated = [];
+
+      diffs.forEach(diff => {
+        const [type, text] = diff;
+        if (type === diff_match_patch.DIFF_INSERT) {
+          text2Annotated.push(`<span class="diff-insert">${text}</span>`);
+        } else if (type === diff_match_patch.DIFF_DELETE) {
+          text1Annotated.push(`<span class="diff-delete">${text}</span>`);
+        } else {
+          text1Annotated.push(text);
+          text2Annotated.push(text);
+        }
+      });
+
+      editor1.getDoc().setValue(text1Annotated.join(''));
+      editor2.getDoc().setValue(text2Annotated.join(''));
+
+      updateMinimap();
+      saveText();
+    }
+
+    function updateMinimap() {
+      const text1 = editor1.getValue();
+      const text2 = editor2.getValue();
+      const diffs = dmp.diff_main(text1, text2);
+
+      dmp.diff_cleanupSemantic(diffs);
+
+      const minimapContent = diffs.map(diff => {
+        const [type, text] = diff;
+        if (type === diff_match_patch.DIFF_INSERT) {
+          return `<span class="diff-insert">${text}</span>`;
+        } else if (type === diff_match_patch.DIFF_DELETE) {
+          return `<span class="diff-delete">${text}</span>`;
+        } else {
+          return text;
+        }
+      }).join('');
+
+      document.getElementById('minimap-content').innerHTML = minimapContent;
+    }
+
+    function saveText() {
+      localStorage.setItem('text1', editor1.getValue());
+      localStorage.setItem('text2', editor2.getValue());
+    }
+
+    function clearAll() {
+      editor1.setValue('');
+      editor2.setValue('');
+      localStorage.removeItem('text1');
+      localStorage.removeItem('text2');
+      updateMinimap();
+    }
+
+    function clearBox(box) {
+      if (box === 1) {
+        editor1.setValue('');
+        localStorage.removeItem('text1');
+      } else {
+        editor2.setValue('');
+        localStorage.removeItem('text2');
+      }
+      updateMinimap();
+    }
+
+    const style = document.createElement('style');
+    style.textContent = `
+      .diff-insert { background-color: #a0ffa0; }
+      .diff-delete { background-color: #ffa0a0; }
+      .minimap-content { white-space: pre-wrap; word-wrap: break-word; }
+    `;
+    document.head.append(style);
+  </script>
+</body>
+</html>

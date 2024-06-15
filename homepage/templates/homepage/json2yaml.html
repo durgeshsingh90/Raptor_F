@@ -28,9 +28,29 @@
             color: #333;
             font-weight: bold;
         }
+        /* Style for the Home button */
+.home-btn {
+    position: relative;
+    top: 10px;
+    left: 10px;
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue color */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 999; /* Ensure it's on top of other elements */
+}
+
+.home-btn:hover {
+    background-color: #0056b3; /* Darker shade of blue */
+}
+
     </style>
 </head>
 <body>
+    <a href="{% url 'homepage:home' %}" class="home-btn">Home</a>
+
     <h1>JSON to YAML Converter</h1>
     <div id="status"></div>
     <div class="copy-buttons">

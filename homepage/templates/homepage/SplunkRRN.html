@@ -10,8 +10,8 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: left;
-            align-items: ;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
             background-color: #f0f0f0;
         }
@@ -53,9 +53,30 @@
         #copyButton:hover {
             background-color: #0056b3;
         }
+        /* Style for the Home button */
+        .home-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff; /* Blue color */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            z-index: 999; /* Ensure it's on top of other elements */
+        }
+
+        /* Hover effect for the Home button */
+        .home-btn:hover {
+            background-color: #0056b3; /* Darker shade of blue */
+        }
     </style>
 </head>
 <body>
+    <a href="{% url 'homepage:home' %}" class="home-btn">Home</a>
+    {% comment %} <h1>Splunk RRN response generator</h1> {% endcomment %}
+
     <div class="container">
         <div class="textarea-container">
             <label for="inputNumbers">Enter RRN numbers:</label>
